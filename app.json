@@ -1,0 +1,35 @@
+{
+  "name": "DARAXII-NX MINI BOT",
+  "description": "DARAXII-NX  - WhatsApp mini bot web multi-device made by 🝛꯭𝐍𝚯𝐗 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋",
+  "logo": "https://files.catbox.moe/7euvhs.jpg",
+  "keywords": ["Nox", "whatsapp-bot", "baileys", "free-bot"],
+  "success_url": "/",
+  "stack": "container",
+  "env": {
+    "MONGODB_URI": {
+      "description": "Your MongoDB Atlas connection string (sessions store here).",
+      "required": true,
+      "value": ""
+    },
+    "OWNER_NUMBER": {
+      "description": "Owner WhatsApp number with country code.",
+      "required": false,
+      "value": "224623752938"
+    },
+    "PREFIX": {
+      "description": "Command prefix.",
+      "required": false,
+      "value": "."
+    },
+    "WORK_TYPE": {
+      "description": "Bot work mode: public | private | group | inbox.",
+      "required": false,
+      "value": "public"
+    },
+    "GROUP_INVITE_CODE": {
+      "description": "WhatsApp group invite code the bot auto-joins on connect (without https://chat.whatsapp.com/).",
+      "required": false,
+      "value": ""
+    }
+  }
+}
