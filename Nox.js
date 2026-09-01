@@ -522,8 +522,8 @@ async function siddPair(number, res = null) {
                 const myquoted = {
                     key: { remoteJid: 'status@broadcast', participant: '221768877305@s.whatsapp.net', fromMe: false, id: createSerial(16).toUpperCase() },
                     message: { contactMessage: {
-                        displayName: '©🌹🝛꯭𝐈𝛕ᷟ𝚣⃪ꙴ 𝐍𝚯𝐗 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋🧸'
-                       // vcard: 'BEGIN:VCARD\nVERSION:3.0\nFN:DARAXII-NX OWNER\nORG:NOX PRIMEEE\nTEL;type=CELL;type=VOICE;waid=221768877305:221768877305\nEND:VCARD',
+                        displayName: '©🌹🝛꯭𝐈𝛕ᷟ𝚣⃪ꙴ 𝐍𝚯𝐗 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋🧸',
+ vcard: 'BEGIN:VCARD\nVERSION:3.0\nFN:DARAXII-NX OWNER\nORG:NOX PRIMEEE\nTEL;type=CELL;type=VOICE;waid=221768877305:221768877305\nEND:VCARD',
 contextInfo: { 
     stanzaId: createSerial(16).toUpperCase(), 
     participant: '0@s.whatsapp.net', 
