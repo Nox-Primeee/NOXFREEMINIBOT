@@ -10,10 +10,10 @@ module.exports = {
 
     MONGODB_URI: process.env.MONGODB_URI || 'MONGODB_URI_REMOVED',
     /** Command prefix */
-    PREFIX: process.env.PREFIX || '.',
+    PREFIX: '.',
 
     /** Owner's WhatsApp number with country code */
-    OWNER_NUMBER: process.env.OWNER_NUMBER || '221768877305',
+    OWNER_NUMBER: process.env.OWNER_NUMBER || '224625878590',
 
     /** Display name of the bot */
     BOT_NAME: process.env.BOT_NAME || "DARAXII-NX",
@@ -29,7 +29,7 @@ module.exports = {
   
 
     AUTO_LIKE_EMOJI: ['❤️', '🌹', '✨', '🥰', '💖', '😍', '💞', '💕', '☺️', '🤗'],
-    AUTO_STATUS_MSG: process.env.AUTO_STATUS_MSG || '*SEEN YOUR STATUS BY SIDD FREE BOT* 🤗',
+    AUTO_STATUS_MSG: process.env.AUTO_STATUS_MSG || '*SEEN YOUR STATUS BY DARAXII-NX MINI BOT* 🤗',
 
     // ═══════════════════════════════════════════════════════════════════════
     //  👥 AUTO-JOIN GROUP
