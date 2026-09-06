@@ -5,7 +5,7 @@
   "main": "index.js",
   "author": "NOX BOTZ INC",
   "engines": {
-    "node": "20.x"
+    "node": "24.x"
   },
   "scripts": {
     "start": "node index.js"
