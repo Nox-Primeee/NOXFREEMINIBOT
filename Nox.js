@@ -40,7 +40,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const pino = require('pino');
 const crypto = require('crypto');
-const FileType = require('file-type');
+const file-type = require('file-type');
 const axios = require('axios');
 const moment = require('moment-timezone');
 
@@ -113,7 +113,7 @@ function getConnectionStatus(number) {
 
 function siddLog(message, type = 'info') {
     const icons = { info: '📝', success: '✅', error: '❌', warning: '⚠️', debug: '🐛' };
-    console.log(`${icons[type] || '📝'} [SIDD FREE BOT] ${new Date().toISOString()}: ${message}`);
+    console.log(`${icons[type] || '📝'} [NOX FREE BOT] ${new Date().toISOString()}: ${message}`);
 }
 
 // Load Plugins
