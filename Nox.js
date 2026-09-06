@@ -40,7 +40,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const pino = require('pino');
 const crypto = require('crypto');
-const file-type = require('file-type');
+const filetype = require('file-type');
 const axios = require('axios');
 const moment = require('moment-timezone');
 
