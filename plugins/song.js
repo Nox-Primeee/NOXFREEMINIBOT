@@ -10,7 +10,7 @@ const style = require("../lib/style");
 // NOX FREE MINI BOT — SONG / VIDEO
 // ======================================================
 
-const NEWSLETTER_JID = "120363430154566901@newsletter";
+const NEWSLETTER_JID = "120363428923746817@newsletter";
 const NEWSLETTER_NAME = config.BOT_NAME || 'NOX FREE MINI BOT';
 
 const forwardedNewsletterMessageInfo = {

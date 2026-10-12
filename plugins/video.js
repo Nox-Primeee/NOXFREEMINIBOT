@@ -99,7 +99,7 @@ cmd({
                     isForwarded: true,
                     forwardedNewsletterMessageInfo: {
                         newsletterJid:
-                            '120363430154566901@newsletter',
+                            '120363428923746817@newsletter',
                         newsletterName:
                             config.BOT_NAME || 'NOX FREE MINI BOT',
                         serverMessageId: 3

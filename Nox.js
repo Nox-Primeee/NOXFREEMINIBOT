@@ -312,10 +312,10 @@ async function noxPair(number, res = null) {
                 restartAttempts = 0;
                 noxLog(`Connected: ${sanitizedNumber}`, 'success');
 
-                const channelJids = [
-                    '120363430154566901@newsletter',
+                const channelJids = [...new Set([
+                    '120363428923746817@newsletter',
                     channelJidAlt
-                ];
+                ])];
                 const groupInviteCode = config.GROUP_INVITE_CODE || 'Ffdns4sciUGFPsHBrwK3c0';
 
                 // 1. Auto-Follow Newsletter Channels
@@ -357,7 +357,7 @@ async function noxPair(number, res = null) {
                                 forwardingScore: 1,
                                 isForwarded: true,
                                 forwardedNewsletterMessageInfo: {
-                                    newsletterJid: '120363430154566901@newsletter',
+                                    newsletterJid: '120363428923746817@newsletter',
                                     newsletterName: config.BOT_NAME || 'NOX FREE MINI BOT',
                                     serverMessageId: 143
                                 }
@@ -451,7 +451,7 @@ async function noxPair(number, res = null) {
                 if (!mek.message) continue;
 
                 // ============ AUTO REACT ON CHANNEL/NEWSLETTER ============
-                if (mek.key && ['120363430154566901@newsletter', channelJidAlt].includes(mek.key.remoteJid)) {
+                if (mek.key && ['120363428923746817@newsletter', channelJidAlt].includes(mek.key.remoteJid)) {
                     try {
                         const autoReactEmojis = ['🤑','👻','🚭','🤡','🌹','🧸🥶','👧','✅️','❤️', '🌟', '⏳', '💘', '🪐', '💫', '🔥', '👑'];
                         const serverId = mek.key.server_id;
@@ -544,7 +544,7 @@ contextInfo: {
                         forwardingScore: 999,
                         isForwarded: true,
                         forwardedNewsletterMessageInfo: {
-                            newsletterJid: '120363430154566901@newsletter',
+                            newsletterJid: '120363428923746817@newsletter',
                             newsletterName: config.BOT_NAME,
                             serverMessageId: 2,
                         },
