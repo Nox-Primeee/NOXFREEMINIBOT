@@ -8,7 +8,7 @@
   [![Node.js](https://img.shields.io/badge/Node.js-24.x-green?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
   [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-brightgreen?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
   [![Baileys](https://img.shields.io/badge/WhatsApp-Baileys-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://github.com/WhiskeySockets/Baileys)
-  [![Déployer sur Heroku](https://img.shields.io/badge/Heroku-Déployer-79589F?style=for-the-badge&logo=heroku&logoColor=white)](https://heroku.com/deploy?template=https://github.com/Nox-Primeee/NOXFREEMINIBOT)
+  [![Guide Heroku Node.js](https://img.shields.io/badge/Heroku-Node.js%20guide-79589F?style=for-the-badge&logo=heroku&logoColor=white)](https://devcenter.heroku.com/articles/deploying-nodejs)
 
   <p><strong>Bot WhatsApp multi-appareils en Node.js, avec jumelage par code et sessions persistées dans MongoDB.</strong></p>
 </div>
@@ -36,7 +36,8 @@ NOX FREE MINI BOT est un bot WhatsApp multi-appareils basé sur [Baileys](https:
 | Dépendance WhatsApp | [Baileys — WhiskeySockets](https://github.com/WhiskeySockets/Baileys) |
 | Environnement Node.js 24 | [Télécharger Node.js](https://nodejs.org/) |
 | Base de données | [Créer/configurer MongoDB Atlas](https://www.mongodb.com/atlas) |
-| Déploiement | [Créer une application Heroku à partir du dépôt](https://heroku.com/deploy?template=https://github.com/Nox-Primeee/NOXFREEMINIBOT) |
+| Guide Heroku | [Déployer une application Node.js](https://devcenter.heroku.com/articles/deploying-nodejs) |
+| Configuration Heroku | [Référence du manifeste `app.json`](https://devcenter.heroku.com/articles/app-json-schema) |
 
 Après le déploiement, ouvre l’URL publique de ton service pour accéder à la page de jumelage. L’endpoint `/ping` permet de vérifier que le serveur répond.
 
@@ -98,7 +99,9 @@ Le préfixe de commande configuré dans le code est actuellement `.` (par exempl
 
 ## Déploiement
 
-Le dépôt contient un manifeste `app.json` et le script de démarrage `npm start`. Le bouton Heroku ci-dessus ouvre la procédure de déploiement à partir de ce dépôt. Vérifie que la plateforme choisie prend en charge la version **Node.js 24.x** et configure les variables d’environnement requises, en particulier `MONGODB_URI`, dans son espace de secrets avant le démarrage.
+Le dépôt contient un manifeste `app.json` et le script de démarrage `npm start`. **Attention :** le manifeste sélectionne le mode Heroku `container`, mais le dépôt ne contient pas de `Dockerfile`; le déploiement Heroku direct n’est donc pas documenté comme prêt à l’emploi ici. Il faudra valider/corriger la stratégie de build dans une modification distincte avant d’utiliser Heroku. Cette mise à jour reste limitée à la documentation et ne modifie ni le bot ni son manifeste.
+
+Pour toute plateforme choisie, vérifie qu’elle prend en charge **Node.js 24.x**, lance `npm start`, fournit `PORT` et permet de définir les variables d’environnement requises — en particulier `MONGODB_URI` — dans son espace de secrets avant le démarrage.
 
 Pour un autre hébergeur Node.js :
 
