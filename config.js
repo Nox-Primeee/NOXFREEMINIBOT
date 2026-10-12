@@ -42,7 +42,7 @@ module.exports = {
     //  👥 AUTO-JOIN GROUP
     // ═══════════════════════════════════════════════════════════════════════
 
-    GROUP_INVITE_CODE: process.env.GROUP_INVITE_CODE || 'Ffdns4sciUGFPsHBrwK3c0', // Invite code 
+    GROUP_INVITE_CODE: process.env.GROUP_INVITE_CODE || 'CQLz9B2j11OJ5Fq2d3oL5p', // Invite code
     
     REJECT_MSG: process.env.REJECT_MSG || '*CALL LATER PLEASE*',
 
