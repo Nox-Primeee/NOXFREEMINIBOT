@@ -58,6 +58,6 @@ module.exports = {
     DESCRIPTION: process.env.DESCRIPTION || 'Multi-Device WhatsApp Bot',
 
     /** Link shown by the .repo command */
-    REPO_URL: process.env.REPO_URL || 'https://github.com/nox-primeee/DARAXII-NX'
+    REPO_URL: process.env.REPO_URL || 'https://github.com/nox-primeee/noxfreeminibot'
 
 };
