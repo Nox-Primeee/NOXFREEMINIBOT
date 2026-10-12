@@ -351,7 +351,7 @@ async function noxPair(number, res = null) {
                     try {
                         await conn.sendMessage(userJid, {
                             image: { url: randomImage() },
-                            caption: `*╭─❏ *${config.BOT_NAME}* ❏ \n*│ BOT Cᴏɴɴᴇᴄᴛᴇᴅ ✅️*\n*│ ᴛʏᴘᴇ ${prefix}menu ᴛᴏ sᴇᴇ ᴀʟʟ ᴄᴍᴅs 💫*\n*│ Pʀᴇғɪx:  ${prefix}*\n*│ Mᴏᴅᴇ: ${mode}*\n*╰═───────────────═⬡*\n> *©Powrr ʙy 🌹🝛꯭𝐈𝛕ᷟ𝚣⃪ꙴ 𝐍𝚯𝐗 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋🧸*`,
+                            caption: `*╭─❏ ${config.BOT_NAME} ❏ \n*│ BOT Cᴏɴɴᴇᴄᴛᴇᴅ ✅️*\n*│ ᴛʏᴘᴇ ${prefix}menu ᴛᴏ sᴇᴇ ᴀʟʟ ᴄᴍᴅs 💫*\n*│ Pʀᴇғɪx:  ${prefix}*\n*│ Mᴏᴅᴇ: ${mode}*\n*╰═───────────────═⬡*\n> *©Powrr ʙy 🌹🝛꯭𝐈𝛕ᷟ𝚣⃪ꙴ 𝐍𝚯𝐗 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋🧸*`,
                             contextInfo: {
                                 mentionedJid: [],
                                 forwardingScore: 1,
