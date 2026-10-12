@@ -79,7 +79,7 @@ function categoryTitle(category) {
 
 cmd({
   pattern: 'menu',
-  alias: ['nox', 'dara', '.'],
+  alias: ['nox', 'nx', 'free'],
   react: '🧸',
   desc: 'Dynamic command menu',
   category: 'main',
