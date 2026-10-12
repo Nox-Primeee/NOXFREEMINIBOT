@@ -12,7 +12,7 @@
   [![Railway](https://img.shields.io/badge/Railway-Node%20guide-0B0D0E?style=for-the-badge&logo=railway&logoColor=white)](https://docs.railway.com/quick-start)
   [![Koyeb](https://img.shields.io/badge/Koyeb-Node%20guide-121212?style=for-the-badge)](https://www.koyeb.com/docs/deploy/express)
 
-  <p><strong>A multi-device WhatsApp bot built with Node.js, pairing codes, and MongoDB-backed sessions.</strong></p>
+  <p><strong>A multi-device WhatsApp bot built with Node.js, pairing codes, and MongoDB-backed sessions Powerd By @Nox-Primeee .</strong></p>
 </div>
 
 ## About
