@@ -1,4 +1,4 @@
-const { cmd } = require('../sidd');
+const { cmd } = require('../nox');
 const { t } = require('../lib/i18n');
 const style = require('../lib/style');
 

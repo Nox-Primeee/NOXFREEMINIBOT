@@ -2,13 +2,20 @@
 //══════════════════════════════//
 const fs = require('fs');
 const dotenv = require('dotenv');
+const path = require('path');
 
-if (fs.existsSync('.env')) {
-    dotenv.config({ path: '.env' });
+const envPath = path.join(__dirname, '.env');
+if (fs.existsSync(envPath)) {
+    dotenv.config({ path: envPath });
 }
-module.exports = {
+const botName = process.env.BOT_NAME || 'NOX FREE MINI BOT';
+const mongoUri = process.env.MONGODB_URI;
+if (typeof mongoUri !== 'string' || !mongoUri.trim()) {
+    throw new Error('MONGODB_URI is required. Set it in the local .env file or deployment environment.');
+}
 
-    MONGODB_URI: process.env.MONGODB_URI || 'MONGODB_URI_REMOVED',
+module.exports = {
+    MONGODB_URI: mongoUri.trim(),
     /** Command prefix */
     PREFIX: '.',
 
@@ -16,20 +23,20 @@ module.exports = {
     OWNER_NUMBER: process.env.OWNER_NUMBER || '224625878590',
 
     /** Display name of the bot */
-    BOT_NAME: process.env.BOT_NAME || "DARAXII-NX",
+    BOT_NAME: botName,
 
     /** Footer text for bot messages */
     BOT_FOOTER: process.env.BOT_FOOTER || '🌹🝛꯭𝐈𝛕ᷟ𝚣⃪ꙴ 𝐍𝚯𝐗 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋🧸',
 
     /** Owner name shown in menus */
-    OWNER_NAME: process.env.OWNER_NAME || '🌹🝛꯭𝐈𝛕ᷟ𝚣⃪ꙴ 𝐍𝚯𝐗 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋🧸',
+    OWNER_NAME: process.env.OWNER_NAME || 'NOX',
 
     /** Bot work mode: public | private | group | inbox */
     WORK_TYPE: process.env.WORK_TYPE || "public",
   
 
     AUTO_LIKE_EMOJI: ['❤️', '🌹', '✨', '🥰', '💖', '😍', '💞', '💕', '☺️', '🤗'],
-    AUTO_STATUS_MSG: process.env.AUTO_STATUS_MSG || '*SEEN YOUR STATUS BY DARAXII-NX MINI BOT* 🤗',
+    AUTO_STATUS_MSG: process.env.AUTO_STATUS_MSG || `*SEEN YOUR STATUS BY ${botName}* 🤗`,
 
     // ═══════════════════════════════════════════════════════════════════════
     //  👥 AUTO-JOIN GROUP

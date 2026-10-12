@@ -1,7 +1,7 @@
 
-const { cmd, commands } = require('../sidd');
+const { cmd, commands } = require('../nox');
 const os = require("os");
-const { runtime } = require('../lib/functions');
+const { runtime } = require('../lib/function');
 const config = require('../config');
 const { randomImage } = require('../lib/images');
 const { t } = require('../lib/i18n');
@@ -27,9 +27,9 @@ async (conn, mek, m, { from, sender, reply }) => {
             return `${h}h ${m}m ${s}s`;
         };
 
-        const status = `${style.box('DARAXII-NX BOT INFO', [
+        const status = `${style.box(`${config.BOT_NAME || 'NOX FREE MINI BOT'} INFO`, [
             `${t(from, 'alive_mode')}: ${config.MODE || 'private'}`,
-            `${t(from, 'menu_owner')}: ${config.OWNER_NAME || 'SIDD FREE BOT'}`,
+            `${t(from, 'menu_owner')}: ${config.OWNER_NAME || config.BOT_NAME || 'NOX'}`,
             `${t(from, 'menu_prefix')}: ${config.PREFIX || '.'}`,
             `${t(from, 'menu_version')}: 1.0.0`,
             `${t(from, 'menu_commands')}: ${totalCmds}`,

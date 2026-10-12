@@ -1,6 +1,6 @@
 const { t } = require('../lib/i18n');
 // plugins/take.js — "Take" a sticker: rename the pack/author
-const { cmd } = require("../sidd");
+const { cmd } = require("../nox");
 const { fakevCard } = require('../lib/fakevCard');
 const { downloadContentFromMessage } = require('@whiskeysockets/baileys');
 const webpmux = require('node-webpmux');

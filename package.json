@@ -1,7 +1,7 @@
 {
-  "name": "daraxii-nx-minibot",
+  "name": "nox-free-mini-bot",
   "version": "1.0.0",
-  "description": " Free base WhatsApp bot — pairing-code + MongoDB session",
+  "description": "NOX FREE MINI BOT — WhatsApp pairing-code bot with MongoDB sessions",
   "main": "index.js",
   "author": "NOX BOTZ INC",
   "engines": {
@@ -11,16 +11,22 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@whiskeysockets/baileys": "^7.0.0-rc14",
     "axios": "latest",
     "body-parser": "^1.20.2",
     "cors": "latest",
     "dotenv": "latest",
     "express": "^4.18.2",
-    "fs-extra": "^11.2.0",
-    "pino": "^8.17.0",
     "file-type": "21.0.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "form-data": "^4.0.0",
+    "fs-extra": "^11.2.0",
     "mongoose": "^8.0.0",
-    "moment-timezone": "^0.6.0"
+    "moment-timezone": "^0.6.0",
+    "node-fetch": "^2.7.0",
+    "node-webpmux": "^3.1.7",
+    "pino": "^8.17.0",
+    "yt-search": "^2.10.4"
   }
 }

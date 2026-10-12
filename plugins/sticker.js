@@ -1,6 +1,6 @@
 const { t } = require('../lib/i18n');
 // plugins/sticker.js — Create a sticker from image/video/gif
-const { cmd } = require("../sidd");
+const { cmd } = require("../nox");
 const { fakevCard } = require('../lib/fakevCard');
 const { downloadContentFromMessage } = require('@whiskeysockets/baileys');
 const fs = require('fs');
@@ -32,7 +32,7 @@ async function imageToWebp(buffer) {
             .on('end', () => resolve(true))
             .addOutputOptions([
                 '-vcodec', 'libwebp',
-                '-vf', "scale='min(512,iw)':min'(512,ih)':force_original_aspect_ratio=decrease,format=rgba,pad=512:512:-1:-1:color=#00000000"
+                '-vf', 'scale=512:512:force_original_aspect_ratio=decrease,format=rgba,pad=512:512:-1:-1:color=0x00000000'
             ])
             .toFormat('webp')
             .save(outputPath);
@@ -55,10 +55,10 @@ async function videoToWebp(buffer) {
             .on('end', () => resolve(true))
             .addOutputOptions([
                 '-vcodec', 'libwebp',
-                '-vf', "scale='min(512,iw)':min'(512,ih)':force_original_aspect_ratio=decrease,fps=15,pad=512:512:-1:-1:color=#00000000,split [a][b];[a] palettegen=reserve_transparent=on:transparency_color=ffffff [p];[b][p] paletteuse",
+                '-vf', 'scale=512:512:force_original_aspect_ratio=decrease,format=rgba,fps=15,pad=512:512:-1:-1:color=0x00000000,split[a][b];[a]palettegen=reserve_transparent=on:transparency_color=ffffff[p];[b][p]paletteuse',
                 '-loop', '0',
                 '-ss', '00:00:00',
-                '-t', '00:00:06',
+                '-t', '00:00:10',
                 '-preset', 'default',
                 '-an',
                 '-vsync', '0'
@@ -124,7 +124,7 @@ cmd({
             : await videoToWebp(buffer);
 
         const author = pushname || config.AUTHOR || '🌹🝛꯭𝐈𝛕ᷟ𝚣⃪ꙴ 𝐍𝚯𝐗 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋🧸';
-        webpBuffer = await addExif(webpBuffer, config.PACKNAME || 'DARAXII-NX STICKER HUB', author);
+        webpBuffer = await addExif(webpBuffer, config.PACKNAME || `${config.BOT_NAME || 'NOX FREE MINI BOT'} STICKER HUB`, author);
 
         await conn.sendMessage(from, { sticker: webpBuffer }, { quoted: fakevCard });
         await conn.sendMessage(from, { react: { text: '✅', key: mek.key } });

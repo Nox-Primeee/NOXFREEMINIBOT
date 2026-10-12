@@ -1,4 +1,4 @@
-const { cmd, commands } = require('../sidd');
+const { cmd, commands } = require('../nox');
 const config = require('../config');
 const moment = require('moment-timezone');
 const { randomImage } = require('../lib/images');
@@ -79,7 +79,7 @@ function categoryTitle(category) {
 
 cmd({
   pattern: 'menu',
-  alias: ['dara', '.'],
+  alias: ['nox', 'dara', '.'],
   react: '🧸',
   desc: 'Dynamic command menu',
   category: 'main',
@@ -90,7 +90,7 @@ cmd({
     const groups = buildGroups();
     const total = groups.reduce((n, [, list]) => n + list.length, 0);
     const prefix = config.PREFIX || '.';
-    const botName = config.BOT_NAME || 'DARAXII-NX 𝐌𝐈𝐍𝐈 𝐁𝐎𝐓';
+    const botName = config.BOT_NAME || 'NOX FREE MINI BOT';
     const owner = config.OWNER_NAME || '🌹🝛꯭𝐈𝛕ᷟ𝚣⃪ꙴ 𝐍𝚯𝐗 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋🧸';
 
     // France timezone
@@ -108,7 +108,7 @@ cmd({
     }
 
     const caption = `*
-  ╭─❏ INFOS ❏*\n*│${t(chat, 'menu_prefix')}: 〔${prefix}〕*\n*│Bo𝚃: DARAXII-NX*\n*│${t(chat, 'menu_commands')}: ${total}*\n*│${t(chat, 'menu_time')}: ${now.format('HH:mm:ss')}*\n*│𝙳𝙰𝚃𝙴: ${now.format('DD/MM/YYYY')}*\n*│${t(chat, 'menu_owner')}: 🌹🝛꯭𝐈𝛕ᷟ𝚣⃪ꙴ 𝐍𝚯𝐗 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋🧸*\n*╰═───────────────═⬡*\n${body}\n${config.DESCRIPTION || '𝙼𝚄𝙻𝚃𝙸-𝙳𝙴𝚅𝙸𝙲𝙴 𝚆𝙷𝙰𝚃𝚂𝙰𝙿𝙿 𝙱𝙾𝚃'}\n> *${config.BOT_FOOTER || '🝛꯭𝐈𝛕ᷟ𝚣⃪ꙴ𝖺َᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝𝐍𝚯𝐗'}*`;
+  ╭─❏ INFOS ❏*\n*│${t(chat, 'menu_prefix')}: 〔${prefix}〕*\n*│Bo𝚃: ${botName}*\n*│${t(chat, 'menu_commands')}: ${total}*\n*│${t(chat, 'menu_time')}: ${now.format('HH:mm:ss')}*\n*│𝙳𝙰𝚃𝙴: ${now.format('DD/MM/YYYY')}*\n*│${t(chat, 'menu_owner')}: 🌹🝛꯭𝐈𝛕ᷟ𝚣⃪ꙴ 𝐍𝚯𝐗 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋🧸*\n*╰═───────────────═⬡*\n${body}\n${config.DESCRIPTION || '𝙼𝚄𝙻𝚃𝙸-𝙳𝙴𝚅𝙸𝙲𝙴 𝚆𝙷𝙰𝚃𝚂𝙰𝙿𝙿 𝙱𝙾𝚃'}\n> *${config.BOT_FOOTER || '🝛꯭𝐈𝛕ᷟ𝚣⃪ꙴ𝖺َᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝ᡃ⃝𝐍𝚯𝐗'}*`;
 
     await conn.sendMessage(chat, {
       image: { url: image },
@@ -119,7 +119,7 @@ cmd({
         isForwarded: true,
         forwardedNewsletterMessageInfo: {
           newsletterJid: '120363430154566901@newsletter',
-          newsletterName: config.BOT_NAME || 'DARAXII-NX V1,
+          newsletterName: botName,
           serverMessageId: 143
         }
       }

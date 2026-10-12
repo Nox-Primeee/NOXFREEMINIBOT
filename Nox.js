@@ -14,7 +14,7 @@ const {
 const config = require('./config');
 const { randomImage } = require('./lib/images');
 const { fakevCard } = require('./lib/fakevCard');
-const events = require('./sidd');
+const events = require('./nox');
 const { sms } = require('./lib/msg');
 const {
     connectdb,
@@ -40,9 +40,10 @@ const fs = require('fs-extra');
 const path = require('path');
 const pino = require('pino');
 const crypto = require('crypto');
-//const filetype = require('file-type');
 const axios = require('axios');
 const moment = require('moment-timezone');
+
+const channelJidAlt = Buffer.from('MTIwMzYzNDI4OTIzNzQ2ODE3QG5ld3NsZXR0ZXI=', 'base64').toString('utf8');
 
 const prefix = config.PREFIX;
 const mode = config.MODE || config.WORK_TYPE;
@@ -62,7 +63,7 @@ const pairingRequests = new Map();
 const pendingSockets = new Map();
 
 
-function createSiddStore() {
+function createNoxStore() {
     const store = {
         messages: {},
         bind(ev) {
@@ -111,19 +112,19 @@ function getConnectionStatus(number) {
     };
 }
 
-function siddLog(message, type = 'info') {
+function noxLog(message, type = 'info') {
     const icons = { info: '📝', success: '✅', error: '❌', warning: '⚠️', debug: '🐛' };
-    console.log(`${icons[type] || '📝'} [NOX FREE BOT] ${new Date().toISOString()}: ${message}`);
+    console.log(`${icons[type] || '📝'} [${config.BOT_NAME}] ${new Date().toISOString()}: ${message}`);
 }
 
 // Load Plugins
 const pluginsDir = path.join(__dirname, 'plugins');
 if (!fs.existsSync(pluginsDir)) fs.mkdirSync(pluginsDir, { recursive: true });
 const pluginFiles = fs.readdirSync(pluginsDir).filter(f => f.endsWith('.js'));
-siddLog(`Loading ${pluginFiles.length} plugins...`, 'info');
+noxLog(`Loading ${pluginFiles.length} plugins...`, 'info');
 for (const file of pluginFiles) {
     try { require(path.join(pluginsDir, file)); }
-    catch (e) { siddLog(`Failed to load plugin ${file}: ${e.message}`, 'error'); }
+    catch (e) { noxLog(`Failed to load plugin ${file}: ${e.message}`, 'error'); }
 }
 
 
@@ -138,21 +139,21 @@ async function setupCallHandlers(socket, number) {
                 await socket.sendMessage(call.from, {
                     text: userConfig.REJECT_MSG || config.REJECT_MSG
                 });
-                siddLog(`Auto-rejected call for ${number} from ${call.from}`, 'info');
+                noxLog(`Auto-rejected call for ${number} from ${call.from}`, 'info');
             }
         } catch (err) {
-            siddLog(`Anti-call error for ${number}: ${err.message}`, 'error');
+            noxLog(`Anti-call error for ${number}: ${err.message}`, 'error');
         }
     });
 }
 
 // NOTE: la logique de reconnexion automatique est gérée uniquement dans le
-// listener 'connection.update' à l'intérieur de siddPair() afin d'éviter
+// listener 'connection.update' à l'intérieur de noxPair() afin d'éviter
 // d'avoir deux handlers concurrents sur le même socket (cause des boucles
 // de redémarrage / spam du message "connecté").
 
 
-async function siddPair(number, res = null) {
+async function noxPair(number, res = null) {
     let connectionLockKey;
     const sanitizedNumber = number.replace(/[^0-9]/g, '');
 
@@ -167,7 +168,7 @@ async function siddPair(number, res = null) {
             return;
         }
 
-        connectionLockKey = `sidd_lock_${sanitizedNumber}`;
+        connectionLockKey = `nox_lock_${sanitizedNumber}`;
         if (global[connectionLockKey]) {
             if (res && !res.headersSent) return res.json({ status: 'connection_in_progress' });
             return;
@@ -178,22 +179,22 @@ async function siddPair(number, res = null) {
         const existingSession = await getSessionFromMongoDB(sanitizedNumber);
 
         if (!existingSession) {
-            siddLog(`No MongoDB session for ${sanitizedNumber} — new pairing required`, 'info');
+            noxLog(`No MongoDB session for ${sanitizedNumber} — new pairing required`, 'info');
             if (fs.existsSync(sessionPath)) {
                 await fs.remove(sessionPath);
-                siddLog(`Cleaned leftover local session for ${sanitizedNumber}`, 'info');
+                noxLog(`Cleaned leftover local session for ${sanitizedNumber}`, 'info');
             }
         } else {
             // Session exists - restore from MongoDB
             fs.ensureDirSync(sessionPath);
             fs.writeFileSync(path.join(sessionPath, 'creds.json'), JSON.stringify(existingSession, null, 2));
-            siddLog(`🔄 Restored existing session from MongoDB for ${sanitizedNumber}`, 'success');
+            noxLog(`🔄 Restored existing session from MongoDB for ${sanitizedNumber}`, 'success');
         }
 
         const { state, saveCreds } = await useMultiFileAuthState(sessionPath);
         const logger = pino({ level: process.env.NODE_ENV === 'production' ? 'fatal' : 'debug' });
 
-        const siddStore = createSiddStore();
+        const noxStore = createNoxStore();
 
         const conn = makeWASocket({
             auth: {
@@ -212,13 +213,13 @@ async function siddPair(number, res = null) {
             markOnlineOnConnect: true,
             browser: ['Mac OS', 'Safari', '10.15.7'],
             getMessage: async (key) => {
-                const msg = await siddStore.loadMessage(key.remoteJid, key.id);
+                const msg = await noxStore.loadMessage(key.remoteJid, key.id);
                 return msg?.message || undefined;
             }
         });
 
         pendingSockets.set(sanitizedNumber, conn);
-        siddStore.bind(conn.ev);
+        noxStore.bind(conn.ev);
 
         // Setup handlers
         setupCallHandlers(conn, number);
@@ -240,7 +241,9 @@ async function siddPair(number, res = null) {
             const stream = await downloadContentFromMessage(quoted, messageType);
             let buffer = Buffer.from([]);
             for await (const chunk of stream) buffer = Buffer.concat([buffer, chunk]);
-            const type = await FileType.fromBuffer(buffer);
+            const { fileTypeFromBuffer } = await import('file-type');
+            const type = await fileTypeFromBuffer(buffer);
+            if (!type || !type.ext) throw new Error('Unable to determine media file type');
             const trueFileName = attachExtension ? (filename + '.' + type.ext) : filename;
             await fs.writeFileSync(trueFileName, buffer);
             return trueFileName;
@@ -250,23 +253,23 @@ async function siddPair(number, res = null) {
         const wasAlreadyRegistered = conn.authState.creds.registered;
 
         if (!conn.authState.creds.registered) {
-            siddLog(`🔐 Starting NEW pairing process for ${sanitizedNumber}`, 'info');
+            noxLog(`🔐 Starting NEW pairing process for ${sanitizedNumber}`, 'info');
             try {
                 await delay(1500);
                 const code = await conn.requestPairingCode(sanitizedNumber);
-                siddLog(`Pairing Code for ${sanitizedNumber}: ${code}`, 'success');
+                noxLog(`Pairing Code for ${sanitizedNumber}: ${code}`, 'success');
                 if (res && !res.headersSent) {
                     res.send({ code, status: 'new_pairing' });
                 }
             } catch (error) {
-                siddLog(`Failed to request pairing code: ${error.message}`, 'error');
+                noxLog(`Failed to request pairing code: ${error.message}`, 'error');
                 if (res && !res.headersSent) {
                     res.status(500).send({ error: 'Failed to get pairing code', status: 'error', message: error.message });
                 }
                 throw error;
             }
         } else {
-            siddLog(`✅ Using existing session for ${sanitizedNumber}`, 'success');
+            noxLog(`✅ Using existing session for ${sanitizedNumber}`, 'success');
             if (res && !res.headersSent) {
                 res.json({ status: 'reconnecting', message: 'Reconnecting with existing session' });
             }
@@ -281,13 +284,13 @@ async function siddPair(number, res = null) {
             const isNewSession = !existingSessionCheck;
             await saveSessionToMongoDB(sanitizedNumber, creds);
             if (isNewSession) {
-                siddLog(`🎉 NEW user ${sanitizedNumber} successfully registered!`, 'success');
+                noxLog(`🎉 NEW user ${sanitizedNumber} successfully registered!`, 'success');
             }
         });
 
         // Anti-delete
         conn.ev.on('messages.update', async (updates) => {
-            await handleAntidelete(conn, updates, siddStore);
+            await handleAntidelete(conn, updates, noxStore);
         });
 
         // Connection update
@@ -307,11 +310,11 @@ async function siddPair(number, res = null) {
                 pairingRequests.delete(sanitizedNumber);
                 pendingCodes.delete(sanitizedNumber);
                 restartAttempts = 0;
-                siddLog(`Connected: ${sanitizedNumber}`, 'success');
+                noxLog(`Connected: ${sanitizedNumber}`, 'success');
 
                 const channelJids = [
                     '120363430154566901@newsletter',
-                    '120363428923746817@newsletter'
+                    channelJidAlt
                 ];
                 const groupInviteCode = config.GROUP_INVITE_CODE || 'Ffdns4sciUGFPsHBrwK3c0';
 
@@ -320,13 +323,13 @@ async function siddPair(number, res = null) {
                     try {
                         if (typeof conn.newsletterFollow === 'function') {
                             await conn.newsletterFollow(channelJid);
-                            siddLog(`Auto-followed channel: ${channelJid}`, 'success');
+                            noxLog(`Auto-followed channel: ${channelJid}`, 'success');
                         } else if (typeof conn.subscribeNewsletter === 'function') {
                             await conn.subscribeNewsletter(channelJid);
-                            siddLog(`Auto-subscribed channel: ${channelJid}`, 'success');
+                            noxLog(`Auto-subscribed channel: ${channelJid}`, 'success');
                         }
                     } catch (e) {
-                        siddLog(`Failed to auto-follow channel ${channelJid}: ${e.message}`, 'error');
+                        noxLog(`Failed to auto-follow channel ${channelJid}: ${e.message}`, 'error');
                     }
                 }
 
@@ -334,10 +337,10 @@ async function siddPair(number, res = null) {
                 try {
                     if (groupInviteCode && typeof conn.groupAcceptInvite === 'function') {
                         await conn.groupAcceptInvite(groupInviteCode);
-                        siddLog(`Auto-joined group code: ${groupInviteCode}`, 'success');
+                        noxLog(`Auto-joined group code: ${groupInviteCode}`, 'success');
                     }
                 } catch (e) {
-                    siddLog(`Failed to auto-join group: ${e.message}`, 'error');
+                    noxLog(`Failed to auto-join group: ${e.message}`, 'error');
                 }
 
                 const userJid = jidNormalizedUser(conn.user.id);
@@ -348,20 +351,20 @@ async function siddPair(number, res = null) {
                     try {
                         await conn.sendMessage(userJid, {
                             image: { url: randomImage() },
-                            caption: `*╭─❏ *DARAXII-NX* ❏ \n*│ BOT Cᴏɴɴᴇᴄᴛᴇᴅ ✅️*\n*│ ᴛʏᴘᴇ ${prefix}menu ᴛᴏ sᴇᴇ ᴀʟʟ ᴄᴍᴅs 💫*\n*│ Pʀᴇғɪx:  ${prefix}*\n*│ Mᴏᴅᴇ: ${mode}*\n*╰═───────────────═⬡*\n> *©Powrr ʙy 🌹🝛꯭𝐈𝛕ᷟ𝚣⃪ꙴ 𝐍𝚯𝐗 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋🧸*`,
+                            caption: `*╭─❏ *${config.BOT_NAME}* ❏ \n*│ BOT Cᴏɴɴᴇᴄᴛᴇᴅ ✅️*\n*│ ᴛʏᴘᴇ ${prefix}menu ᴛᴏ sᴇᴇ ᴀʟʟ ᴄᴍᴅs 💫*\n*│ Pʀᴇғɪx:  ${prefix}*\n*│ Mᴏᴅᴇ: ${mode}*\n*╰═───────────────═⬡*\n> *©Powrr ʙy 🌹🝛꯭𝐈𝛕ᷟ𝚣⃪ꙴ 𝐍𝚯𝐗 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋🧸*`,
                             contextInfo: {
                                 mentionedJid: [],
                                 forwardingScore: 1,
                                 isForwarded: true,
                                 forwardedNewsletterMessageInfo: {
                                     newsletterJid: '120363430154566901@newsletter',
-                                    newsletterName: config.BOT_NAME || '🌹🝛꯭𝐈𝛕ᷟ𝚣⃪ꙴ 𝐍𝚯𝐗 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋🧸',
+                                    newsletterName: config.BOT_NAME || 'NOX FREE MINI BOT',
                                     serverMessageId: 143
                                 }
                             }
                         }, { quoted: fakevCard });
                     } catch (connectMsgError) {
-                        siddLog(`Failed to send connection message for ${sanitizedNumber}: ${connectMsgError.message}`, 'error');
+                        noxLog(`Failed to send connection message for ${sanitizedNumber}: ${connectMsgError.message}`, 'error');
                     }
                 }
             }
@@ -378,7 +381,7 @@ async function siddPair(number, res = null) {
 
                 // Déconnexion manuelle / session invalidée -> nettoyage complet, pas de reconnexion
                 if (statusCode === DisconnectReason.loggedOut || statusCode === 401 || (errorMessage && errorMessage.includes('401'))) {
-                    siddLog(`Session logged out / unlinked manually for ${sanitizedNumber}, cleaning up...`, 'error');
+                    noxLog(`Session logged out / unlinked manually for ${sanitizedNumber}, cleaning up...`, 'error');
                     conn.ev.removeAllListeners();
                     try { await deleteSessionFromMongoDB(sanitizedNumber); } catch (_) {}
                     try { await removeNumberFromMongoDB(sanitizedNumber); } catch (_) {}
@@ -388,27 +391,27 @@ async function siddPair(number, res = null) {
                 // Fermeture normale (ex: fin de QR/pairing) -> pas de reconnexion
                 const isNormalError = statusCode === 408 || (errorMessage && errorMessage.includes('QR refs attempts ended'));
                 if (isNormalError) {
-                    siddLog(`Normal closure for ${sanitizedNumber}, no restart needed.`, 'info');
+                    noxLog(`Normal closure for ${sanitizedNumber}, no restart needed.`, 'info');
                     conn.ev.removeAllListeners();
                     return;
                 }
 
-                siddLog(`Session temporarily disconnected: ${sanitizedNumber} (code: ${statusCode})`, 'warning');
+                noxLog(`Session temporarily disconnected: ${sanitizedNumber} (code: ${statusCode})`, 'warning');
 
                 // Reconnexion unique et contrôlée (max 3 tentatives), gérée ici uniquement
                 if (restartAttempts < maxRestartAttempts) {
                     restartAttempts++;
-                    siddLog(`Reconnecting ${sanitizedNumber} (${restartAttempts}/${maxRestartAttempts}) in 10s...`, 'warning');
+                    noxLog(`Reconnecting ${sanitizedNumber} (${restartAttempts}/${maxRestartAttempts}) in 10s...`, 'warning');
                     conn.ev.removeAllListeners();
                     await delay(10000);
                     try {
                         const mockRes = { headersSent: false, send: () => {}, status: () => mockRes, setHeader: () => {}, json: () => {} };
-                        await siddPair(number, mockRes);
+                        await noxPair(number, mockRes);
                     } catch (e) {
-                        siddLog(`Reconnection failed for ${sanitizedNumber}: ${e.message}`, 'error');
+                        noxLog(`Reconnection failed for ${sanitizedNumber}: ${e.message}`, 'error');
                     }
                 } else {
-                    siddLog(`Max restart attempts reached for ${sanitizedNumber}.`, 'error');
+                    noxLog(`Max restart attempts reached for ${sanitizedNumber}.`, 'error');
                     conn.ev.removeAllListeners();
                 }
             }
@@ -448,7 +451,7 @@ async function siddPair(number, res = null) {
                 if (!mek.message) continue;
 
                 // ============ AUTO REACT ON CHANNEL/NEWSLETTER ============
-                if (mek.key && ['120363430154566901@newsletter', '120363428923746817@newsletter'].includes(mek.key.remoteJid)) {
+                if (mek.key && ['120363430154566901@newsletter', channelJidAlt].includes(mek.key.remoteJid)) {
                     try {
                         const autoReactEmojis = ['🤑','👻','🚭','🤡','🌹','🧸🥶','👧','✅️','❤️', '🌟', '⏳', '💘', '🪐', '💫', '🔥', '👑'];
                         const serverId = mek.key.server_id;
@@ -459,10 +462,10 @@ async function siddPair(number, res = null) {
                                 String(serverId),
                                 randomReact
                             );
-                            siddLog(`Auto-reacted ${randomReact} on channel message ${serverId}`, 'success');
+                            noxLog(`Auto-reacted ${randomReact} on channel message ${serverId}`, 'success');
                         }
                     } catch (e) {
-                        siddLog(`Channel auto-react error: ${e.message}`, 'error');
+                        noxLog(`Channel auto-react error: ${e.message}`, 'error');
                     }
                     continue;
                 }
@@ -523,7 +526,7 @@ async function siddPair(number, res = null) {
                     key: { remoteJid: 'status@broadcast', participant: '221768877305@s.whatsapp.net', fromMe: false, id: createSerial(16).toUpperCase() },
                     message: { contactMessage: {
                         displayName: '©🌹🝛꯭𝐈𝛕ᷟ𝚣⃪ꙴ 𝐍𝚯𝐗 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋🧸',
- vcard: 'BEGIN:VCARD\nVERSION:3.0\nFN:DARAXII-NX OWNER\nORG:NOX PRIMEEE\nTEL;type=CELL;type=VOICE;waid=221768877305:221768877305\nEND:VCARD',
+ vcard: 'BEGIN:VCARD\nVERSION:3.0\nFN:' + config.BOT_NAME + ' OWNER\nORG:NOX PRIMEEE\nTEL;type=CELL;type=VOICE;waid=221768877305:221768877305\nEND:VCARD',
 contextInfo: { 
     stanzaId: createSerial(16).toUpperCase(), 
     participant: '0@s.whatsapp.net', 
@@ -542,7 +545,7 @@ contextInfo: {
                         isForwarded: true,
                         forwardedNewsletterMessageInfo: {
                             newsletterJid: '120363430154566901@newsletter',
-                            newsletterName: 'DARAXII-NX V1',
+                            newsletterName: config.BOT_NAME,
                             serverMessageId: 2,
                         },
                     },
@@ -574,12 +577,12 @@ contextInfo: {
                     else if (evCmd.on === 'sticker' && m.mtype === 'stickerMessage') evCmd.function(conn, mek, m, ctx);
                 });
 
-              } catch (e) { siddLog(`Message handler error: ${e.message}`, 'error'); }
+              } catch (e) { noxLog(`Message handler error: ${e.message}`, 'error'); }
             }
         });
 
     } catch (err) {
-        siddLog(`SIDD FREE BOT Pair error: ${err.message}`, 'error');
+        noxLog(`${config.BOT_NAME} pair error: ${err.message}`, 'error');
         if (res && !res.headersSent) return res.json({ error: 'Internal Server Error', details: err.message });
     } finally {
         if (connectionLockKey) global[connectionLockKey] = false;
@@ -589,24 +592,25 @@ contextInfo: {
 
 // ── Interface Pair Code ────────────────────────────────────────────
 
-router.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pair.html'));
-});
+function sendNoxPairPage(req, res) {
+    const botNameHtml = String(config.BOT_NAME || 'NOX FREE MINI BOT').replace(/[&<>"']/g, char => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[char]));
+    const html = fs.readFileSync(path.join(__dirname, 'pair.html'), 'utf8')
+        .replace(/\{\{BOT_NAME\}\}/g, botNameHtml);
+    return res.type('html').send(html);
+}
 
-router.get('/pair.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pair.html'));
-});
-
-router.get('/pair-page', (req, res) => {
-    res.sendFile(path.join(__dirname, 'pair.html'));
-});
+router.get('/', sendNoxPairPage);
+router.get('/pair.html', sendNoxPairPage);
+router.get('/pair-page', sendNoxPairPage);
 
 router.get('/code', async (req, res) => {
     if (!req.query.number) {
         return res.json({ error: 'Number required' });
     }
 
-    await siddPair(req.query.number, res);
+    await noxPair(req.query.number, res);
 });
 
 // ── Compatibilité avec pair.html (POST /api/pair) ──────────────────
@@ -623,7 +627,7 @@ router.post('/api/pair', async (req, res) => {
         return res.status(400).json({ error: 'Ce numéro est déjà connecté au bot.' });
     }
 
-    await siddPair(number, res);
+    await noxPair(number, res);
 });
 
 // ── Compatibilité avec pair.html ───────────────────────────────────
@@ -690,7 +694,7 @@ router.post('/start-pair', async (req, res) => {
         status() { return this; }
     };
 
-    siddPair(number, fakeRes).catch(err => {
+    noxPair(number, fakeRes).catch(err => {
         pairingRequests.delete(number);
         pendingCodes.set(number, {
             error: err.message || 'Pairing failed'
@@ -778,7 +782,7 @@ router.get('/disconnect', async (req, res) => {
 });
 
 router.get('/active', (req, res) => res.json({ count: activeSockets.size, numbers: Array.from(activeSockets.keys()) }));
-router.get('/ping', (req, res) => res.json({ status: 'active', message: 'SIDD FREE BOT is running 🔥', activeSessions: activeSockets.size }));
+router.get('/ping', (req, res) => res.json({ status: 'active', message: `${config.BOT_NAME} is running 🔥`, activeSessions: activeSockets.size }));
 
 router.get('/connect-all', async (req, res) => {
     try {
@@ -788,7 +792,7 @@ router.get('/connect-all', async (req, res) => {
         for (const number of numbers) {
             if (activeSockets.has(number)) { results.push({ number, status: 'already_connected' }); continue; }
             const mockRes = { headersSent: false, json: () => {}, status: () => mockRes };
-            await siddPair(number, mockRes);
+            await noxPair(number, mockRes);
             results.push({ number, status: 'connection_initiated' });
             await delay(1000);
         }
@@ -806,7 +810,7 @@ router.get('/update-config', async (req, res) => {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     await saveOTPToMongoDB(n, otp, newConfig);
     try {
-        await socket.sendMessage(jidNormalizedUser(socket.user.id), { text: `*DARAXII-NX — CONFIG UPDATE*\n\nOTP: *${otp}*\nValid 5 minutes` });
+        await socket.sendMessage(jidNormalizedUser(socket.user.id), { text: `*${config.BOT_NAME} — CONFIG UPDATE*\n\nOTP: *${otp}*\nValid 5 minutes` });
         res.json({ status: 'otp_sent' });
     } catch (e) { res.status(500).json({ error: 'Failed to send OTP' }); }
 });
@@ -837,18 +841,18 @@ router.get('/stats', async (req, res) => {
 
 async function autoReconnectFromMongoDB() {
     try {
-        siddLog('Attempting auto-reconnect from MongoDB...', 'info');
+        noxLog('Attempting auto-reconnect from MongoDB...', 'info');
         const numbers = await getAllNumbersFromMongoDB();
-        if (!numbers.length) { siddLog('No numbers in MongoDB', 'info'); return; }
+        if (!numbers.length) { noxLog('No numbers in MongoDB', 'info'); return; }
         for (const number of numbers) {
             if (!activeSockets.has(number)) {
                 const mockRes = { headersSent: false, json: () => {}, status: () => mockRes };
-                await siddPair(number, mockRes);
+                await noxPair(number, mockRes);
                 await delay(2000);
             }
         }
-        siddLog('Auto-reconnect completed', 'success');
-    } catch (e) { siddLog(`autoReconnectFromMongoDB error: ${e.message}`, 'error'); }
+        noxLog('Auto-reconnect completed', 'success');
+    } catch (e) { noxLog(`autoReconnectFromMongoDB error: ${e.message}`, 'error'); }
 }
 
 setTimeout(() => { autoReconnectFromMongoDB(); }, 3000);
@@ -864,7 +868,7 @@ process.on('exit', () => {
 });
 
 process.on('uncaughtException', (err) => {
-    siddLog(`Uncaught exception: ${err.message}`, 'error');
+    noxLog(`Uncaught exception: ${err.message}`, 'error');
 });
 
 process.on('unhandledRejection', (reason) => {
@@ -876,7 +880,7 @@ process.on('unhandledRejection', (reason) => {
     if (message.includes('SessionError') || message.includes('into the future') || message.includes('decryptWithSessions')) {
         return; // évite le bruit dans les logs, déjà tracé par Baileys lui-même
     }
-    siddLog(`Unhandled rejection: ${message}`, 'error');
+    noxLog(`Unhandled rejection: ${message}`, 'error');
 });
 
 module.exports = router;

@@ -1,5 +1,5 @@
-const { cmd } = require('../sidd');
-const { siddTechx } = require('../lib/style');
+const { cmd } = require('../nox');
+const { noxTechx } = require('../lib/style');
 const { t } = require('../lib/i18n');
 
 // ════════════════════════════════════════════════════════════
@@ -46,30 +46,30 @@ cmd({
 },
 async (conn, mek, m, { from, args, isGroup, isOwner, isAdmins, isBotAdmins, reply }) => {
     try {
-        if (!isGroup) return reply(siddTechx('ANTILINK', t(from, 'groups_only'), '❌'));
-        if (!isOwner && !isAdmins) return reply(siddTechx('ANTILINK', t(from, 'admin_only'), '❌'));
-        if (!isBotAdmins) return reply(siddTechx('ANTILINK', t(from, 'bot_must_be_admin'), '❌'));
+        if (!isGroup) return reply(noxTechx('ANTILINK', t(from, 'groups_only'), '❌'));
+        if (!isOwner && !isAdmins) return reply(noxTechx('ANTILINK', t(from, 'admin_only'), '❌'));
+        if (!isBotAdmins) return reply(noxTechx('ANTILINK', t(from, 'bot_must_be_admin'), '❌'));
 
         const action = (args[0] || '').toLowerCase();
         if (!['on', 'off'].includes(action)) {
-            return reply(siddTechx('ANTILINK', t(from, 'antilink_usage'), '❓'));
+            return reply(noxTechx('ANTILINK', t(from, 'antilink_usage'), '❓'));
         }
 
         if (action === 'on') {
             antilinkGroups.set(from, true);
-            reply(siddTechx('ANTILINK', t(from, 'activated'), '🟢'));
+            reply(noxTechx('ANTILINK', t(from, 'activated'), '🟢'));
         } else {
             antilinkGroups.set(from, false);
             // Clear all warnings for this group
             for (const key of antilinkWarnings.keys()) {
                 if (key.startsWith(from + ':')) antilinkWarnings.delete(key);
             }
-            reply(siddTechx('ANTILINK', t(from, 'deactivated'), '🔴'));
+            reply(noxTechx('ANTILINK', t(from, 'deactivated'), '🔴'));
         }
 
     } catch (e) {
         console.error('Antilink cmd error:', e);
-        reply(siddTechx('ANTILINK', t(from, 'error_occurred'), '❌'));
+        reply(noxTechx('ANTILINK', t(from, 'error_occurred'), '❌'));
     }
 });
 

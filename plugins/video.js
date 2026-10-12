@@ -1,4 +1,4 @@
-const { cmd } = require('../sidd');
+const { cmd } = require('../nox');
 const config = require('../config');
 const axios = require('axios');
 const yts = require('yt-search');
@@ -93,7 +93,7 @@ cmd({
                     url: videoUrl
                 },
                 mimetype: 'video/mp4',
-                caption: `${style.box('VIDEO', title)}\n\n> POWER by DARAXII-NX `,
+                caption: `${style.box('VIDEO', title)}\n\n> POWER by ${config.BOT_NAME || 'NOX FREE MINI BOT'} `,
                 contextInfo: {
                     forwardingScore: 1,
                     isForwarded: true,
@@ -101,7 +101,7 @@ cmd({
                         newsletterJid:
                             '120363430154566901@newsletter',
                         newsletterName:
-                            config.BOT_NAME || 'DARAXII-NX 𝐌𝐈𝐍𝐈 𝐁𝐎𝐓',
+                            config.BOT_NAME || 'NOX FREE MINI BOT',
                         serverMessageId: 3
                     }
                 }

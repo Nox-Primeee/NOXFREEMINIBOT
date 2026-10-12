@@ -1,7 +1,7 @@
 const { t } = require('../lib/i18n');
-const { sleep } = require('../lib/functions');
+const { sleep } = require('../lib/function');
 const config = require('../config');
-const { cmd } = require("../sidd");
+const { cmd } = require("../nox");
 const { fakevCard } = require('../lib/fakevCard');
 const style = require('../lib/style');
 

@@ -1,4 +1,4 @@
-const { cmd } = require('../sidd');
+const { cmd } = require('../nox');
 const config = require('../config');
 const { randomImage } = require('../lib/images');
 const { t } = require('../lib/i18n');
@@ -6,7 +6,7 @@ const style = require('../lib/style');
 const os = require('os');
 const fs = require('fs');
 const path = require('path');
-const { runtime } = require('../lib/functions');
+const { runtime } = require('../lib/function');
 
 cmd({
     pattern: "alive",
@@ -21,7 +21,7 @@ cmd({
         const end = Date.now();
         const pingTime = end - start;
 
-        const botName = config.BOT_NAME || 'SIDD FREE BOT';
+        const botName = config.BOT_NAME || 'NOX FREE MINI BOT';
         const botNumber = conn.user.id.split(':')[0];
         const ownerNumber = config.OWNER_NUMBER || '33751103165';
         const liveMsg = config.LIVE_MSG || t(from, 'alive_running');
@@ -84,4 +84,3 @@ cmd({
         await conn.sendMessage(from, { react: { text: "❌", key: mek.key } });
     }
 });
-

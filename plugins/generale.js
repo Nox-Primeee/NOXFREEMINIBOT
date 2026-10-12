@@ -1,4 +1,4 @@
-const { cmd, commands } = require('../sidd');
+const { cmd, commands } = require('../nox');
 const { t } = require('../lib/i18n');
 const config = require('../config');
 const os = require('os');
@@ -20,7 +20,7 @@ async(conn, mek, m, { from, myquoted }) => {
     // Création d'une vCard (Fiche contact)
     const vcard = 'BEGIN:VCARD\n' +
                   'VERSION:3.0\n' +
-                  'FN:DARAXII-NX (Owner)\n' +
+                  'FN:' + (config.BOT_NAME || 'NOX FREE MINI BOT') + ' (Owner)\n' +
                   'ORG:🌹🝛꯭𝐈𝛕ᷟ𝚣⃪ꙴ 𝐍𝚯𝐗 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋🧸;\n' +
                   `TEL;type=CELL;type=VOICE;waid=${ownerNumber}:${ownerNumber}\n` +
                   'END:VCARD';

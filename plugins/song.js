@@ -1,16 +1,17 @@
-const { cmd } = require("../sidd");
+const { cmd } = require("../nox");
 const fetch = require("node-fetch");
 const yts = require("yt-search");
 const axios = require("axios");
+const config = require('../config');
 const { fakevCard } = require("../lib/fakevCard");
 const style = require("../lib/style");
 
 // ======================================================
-// SIDD MINI BOT — SONG / VIDEO
+// NOX FREE MINI BOT — SONG / VIDEO
 // ======================================================
 
 const NEWSLETTER_JID = "120363430154566901@newsletter";
-const NEWSLETTER_NAME = "DARAXII-NX V1 𝐌𝐈𝐍𝐈 𝐁𝐎𝐓";
+const NEWSLETTER_NAME = config.BOT_NAME || 'NOX FREE MINI BOT';
 
 const forwardedNewsletterMessageInfo = {
   newsletterJid: NEWSLETTER_JID,
@@ -281,7 +282,7 @@ cmd({
       return reply(style.error(TEXT.videoError));
     }
 
-    let videoTitle = "DARAXII-NX 𝐌𝐈𝐍𝐈 𝐁𝐎𝐓";
+    let videoTitle = config.BOT_NAME || 'NOX FREE MINI BOT';
 
     try {
       const searchInfo = await yts(youtubeUrl);
@@ -304,7 +305,7 @@ cmd({
           url: videoUrl
         },
 
-        caption: `${style.box('VIDEO', videoTitle)}\n\n> Made By DARAXII-NX`,
+        caption: `${style.box('VIDEO', videoTitle)}\n\n> Made By ${config.BOT_NAME || 'NOX FREE MINI BOT'}`,
 
         contextInfo: {
           forwardedNewsletterMessageInfo,

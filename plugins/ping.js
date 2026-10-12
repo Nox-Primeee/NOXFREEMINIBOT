@@ -1,4 +1,4 @@
-const { cmd } = require("../sidd.js");
+const { cmd } = require("../nox.js");
 const config = require("../config.js");
 
 cmd({
@@ -6,19 +6,26 @@ cmd({
     alias: ["p"],
     desc: "Check bot speed",
     category: "main"
-}, async (m, sock) => {
-    const start = Date.now();
-    const sent = await sock.sendMessage(m.from, { text: "🏓 Pinging..." }, { quoted: m.raw });
-    const speed = Date.now() - start;
+}, async (conn, mek, m, { from, reply }) => {
+    try {
+        const start = Date.now();
+        const sent = await conn.sendMessage(from, { text: "🏓 Pinging..." }, { quoted: mek });
+        const speed = Date.now() - start;
 
-    const text =
-        `╭─❏ ${config.BOT_NAME}❏\n` +
-        `│ 🏓 Pong!\n` +
-        `│ Latence: ${speed}ms\n` +
-      `╰═───────────────═⬡\n\n` +
-        `${config.FOOTER}`;
+        const text =
+            `╭─❏ ${config.BOT_NAME || "NOX FREE MINI BOT"} ❏\n` +
+            `│ 🏓 Pong!\n` +
+            `│ Latence: ${speed}ms\n` +
+            `╰═───────────────═⬡\n\n` +
+            `${config.BOT_FOOTER || ""}`;
 
-    await sock.sendMessage(m.from, { text, edit: sent.key }, {}).catch(async () => {
-        await sock.sendMessage(m.from, { text }, { quoted: m.raw });
-    });
+        try {
+            await conn.sendMessage(from, { text, edit: sent.key });
+        } catch (editError) {
+            await conn.sendMessage(from, { text }, { quoted: mek });
+        }
+    } catch (error) {
+        console.error("PING COMMAND ERROR:", error);
+        await reply(`Ping failed: ${error.message}`);
+    }
 });
