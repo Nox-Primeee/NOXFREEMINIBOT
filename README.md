@@ -3,52 +3,57 @@
 
   # NOX FREE MINI BOT
 
-  [![Version](https://img.shields.io/badge/Version-1.0.0-green?style=for-the-badge)](https://github.com/Nox-Primeee/NOXFREEMINIBOT/releases)
-  [![Licence](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
+  [![Version](https://img.shields.io/badge/Version-1.0.0-green?style=for-the-badge)](https://github.com/Nox-Primeee/NOXFREEMINIBOT)
+  [![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
   [![Node.js](https://img.shields.io/badge/Node.js-24.x-green?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
   [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-brightgreen?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
   [![Baileys](https://img.shields.io/badge/WhatsApp-Baileys-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://github.com/WhiskeySockets/Baileys)
-  [![Guide Heroku Node.js](https://img.shields.io/badge/Heroku-Node.js%20guide-79589F?style=for-the-badge&logo=heroku&logoColor=white)](https://devcenter.heroku.com/articles/deploying-nodejs)
+  [![Render](https://img.shields.io/badge/Render-Node%20guide-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://render.com/docs/deploy-node-express-app)
+  [![Railway](https://img.shields.io/badge/Railway-Node%20guide-0B0D0E?style=for-the-badge&logo=railway&logoColor=white)](https://docs.railway.com/quick-start)
+  [![Koyeb](https://img.shields.io/badge/Koyeb-Node%20guide-121212?style=for-the-badge)](https://www.koyeb.com/docs/deploy/express)
 
-  <p><strong>Bot WhatsApp multi-appareils en Node.js, avec jumelage par code et sessions persistées dans MongoDB.</strong></p>
+  <p><strong>A multi-device WhatsApp bot built with Node.js, pairing codes, and MongoDB-backed sessions.</strong></p>
 </div>
 
-## À propos
+## About
 
-NOX FREE MINI BOT est un bot WhatsApp multi-appareils basé sur [Baileys](https://github.com/WhiskeySockets/Baileys). Le projet comprend une page web de jumelage, une API Express et un stockage MongoDB pour les sessions et les données associées.
+NOX FREE MINI BOT is a multi-device WhatsApp bot built with [Baileys](https://github.com/WhiskeySockets/Baileys). The project includes a web pairing page, an Express HTTP server, and MongoDB storage for sessions and related data.
 
-### Fonctions principales
+### Main features
 
-- Jumelage d’un compte WhatsApp à l’aide d’un code depuis la page web du bot.
-- Restauration des sessions enregistrées dans MongoDB après redémarrage.
-- Commandes d’information et d’état, dont `menu`, `ping`, `alive` et `info`.
-- Outils médias et téléchargement, stickers, informations de profil et utilitaires.
-- Outils de groupe et de modération, notamment anti-lien et actions d’administration.
-- Personnalisation du nom, du pied de page et de certains messages du bot.
+- Pair a WhatsApp account with a code from the bot's web page.
+- Restore sessions stored in MongoDB after a restart.
+- Information and status commands, including `menu`, `ping`, `alive`, and `info`.
+- Media tools and downloads, stickers, profile information, and utilities.
+- Group and moderation tools, including anti-link, anti-delete, and administrative actions.
+- Customize the bot name, message footer, and selected messages.
 
-> Les commandes disponibles évoluent avec les plugins du dépôt. Consulte `menu` dans WhatsApp pour afficher le menu courant.
+> Available commands can change with the repository's plugins. Send `menu` to the bot to see the current command list.
 
-## Liens rapides
+## Quick links
 
-| Ressource | Lien |
+| Resource | Link |
 | --- | --- |
-| Code source | [GitHub — NOXFREEMINIBOT](https://github.com/Nox-Primeee/NOXFREEMINIBOT) |
-| Dépendance WhatsApp | [Baileys — WhiskeySockets](https://github.com/WhiskeySockets/Baileys) |
-| Environnement Node.js 24 | [Télécharger Node.js](https://nodejs.org/) |
-| Base de données | [Créer/configurer MongoDB Atlas](https://www.mongodb.com/atlas) |
-| Guide Heroku | [Déployer une application Node.js](https://devcenter.heroku.com/articles/deploying-nodejs) |
-| Configuration Heroku | [Référence du manifeste `app.json`](https://devcenter.heroku.com/articles/app-json-schema) |
+| Source code | [GitHub — NOXFREEMINIBOT](https://github.com/Nox-Primeee/NOXFREEMINIBOT) |
+| WhatsApp library | [Baileys — WhiskeySockets](https://github.com/WhiskeySockets/Baileys) |
+| Node.js 24.x | [Node.js downloads](https://nodejs.org/) |
+| Database | [MongoDB Atlas](https://www.mongodb.com/atlas) |
+| Render deployment guide | [Deploy a Node/Express app](https://render.com/docs/deploy-node-express-app) |
+| Railway deployment guide | [Deploy from GitHub](https://docs.railway.com/quick-start) |
+| Koyeb deployment guide | [Deploy an Express app](https://www.koyeb.com/docs/deploy/express) |
+| MongoDB connection guide | [Connect to an Atlas cluster](https://www.mongodb.com/docs/atlas/connect-to-database-deployment/) |
 
-Après le déploiement, ouvre l’URL publique de ton service pour accéder à la page de jumelage. L’endpoint `/ping` permet de vérifier que le serveur répond.
+## Requirements
 
-## Prérequis
+- **Node.js 24.x** and npm, as declared in `package.json`.
+- A MongoDB database reachable from the host. MongoDB Atlas is one option; database plans and quotas are separate from hosting.
+- A Linux server or Node.js hosting service that can run `npm start`, provide a `PORT` environment variable, and keep a long-running process alive.
+- Outbound network access to WhatsApp and MongoDB.
+- A WhatsApp account whose owner is authorized to pair it with the bot.
 
-- Node.js **24.x** et npm (version précisée dans `package.json`).
-- Une base MongoDB accessible depuis l’hébergement, par exemple MongoDB Atlas.
-- Un hébergement ou serveur Node.js qui peut exécuter `npm start` et fournir la variable d’environnement `PORT` si nécessaire.
-- Un compte WhatsApp à jumeler. Le jumelage doit être effectué par son propriétaire.
+The application serves its pairing page at `/` and its health response at `/ping`. It listens on `process.env.PORT`, falling back to port `8000` when `PORT` is not set.
 
-## Installation locale
+## Local installation
 
 ```bash
 git clone https://github.com/Nox-Primeee/NOXFREEMINIBOT.git
@@ -57,7 +62,7 @@ npm install
 cp .env.example .env
 ```
 
-Modifie ensuite `.env` localement et renseigne au minimum `MONGODB_URI`. Ne colle pas une vraie URI de base de données dans le README, les issues ou les journaux et ne commite jamais `.env`.
+Edit `.env` locally and set at least `MONGODB_URI`. Never put a real database URI in this README, an issue, or a log, and never commit your local `.env` file.
 
 ```env
 MONGODB_URI=
@@ -65,76 +70,108 @@ BOT_NAME="NOX FREE MINI BOT"
 OWNER_NAME="NOX"
 ```
 
-Lance le serveur :
+Start the server:
 
 ```bash
 npm start
 ```
 
-Par défaut, le serveur écoute sur le port `8000`; la plupart des hébergeurs fournissent leur propre valeur via `PORT`.
+## Environment variables
 
-## Configuration
+Set values in a local `.env` file or in your hosting provider's environment-variable/secret settings. **Do not publish private values.**
 
-Définis les variables dans le fichier `.env` en local ou dans le gestionnaire de variables/secrets de ton hébergeur. **Ne publie aucune valeur privée**.
-
-| Variable | Requise | Utilité |
+| Variable | Required? | Purpose |
 | --- | --- | --- |
-| `MONGODB_URI` | Oui | URI de connexion à MongoDB. Le bot refuse de démarrer si elle est absente ou vide. |
-| `BOT_NAME` | Non | Nom affiché par le bot et la page de jumelage. Défaut : `NOX FREE MINI BOT`. |
-| `OWNER_NAME` | Non | Libellé du propriétaire affiché dans certaines informations. Défaut : `NOX`. |
-| `OWNER_NUMBER` | Non, recommandé | Numéro WhatsApp du propriétaire au format international, pour les fonctions réservées au propriétaire. Configure-le dans les secrets de l’hébergement; aucune valeur personnelle n’est incluse ici. |
-| `WORK_TYPE` | Non | Mode de fonctionnement : `public`, `private`, `group` ou `inbox`. Défaut : `public`. |
-| `GROUP_INVITE_CODE` | Non | Code utilisé par la fonction d’auto-jonction à un groupe. La source contient aussi une valeur de repli : vérifie les réglages privés avant déploiement. Ne publie jamais ce code. |
-| `BOT_FOOTER` | Non | Texte de pied de page des réponses. |
-| `AUTO_STATUS_MSG` | Non | Texte associé au traitement automatique des statuts. |
-| `ALIVE_IMG` | Non | URL de l’image utilisée par la commande d’état. |
-| `LIVE_MSG` | Non | Texte de statut affiché par le bot. |
-| `MENU_IMAGE_URL` | Non | URL de l’image du menu. |
-| `DESCRIPTION` | Non | Courte description affichée dans le menu. |
-| `REPO_URL` | Non | Lien affiché par la commande `repo`; tu peux le régler vers ce dépôt. |
-| `PORT` | Fournie par l’hébergeur | Port HTTP d’écoute; valeur locale par défaut : `8000`. |
-| `NODE_ENV` | Non | Peut être réglée sur `production` sur l’hébergement pour adapter le niveau de journalisation. |
+| `MONGODB_URI` | Yes | MongoDB connection URI. The application refuses to start when this value is missing or blank. |
+| `BOT_NAME` | No | Name shown by the bot and pairing page. Default: `NOX FREE MINI BOT`. |
+| `OWNER_NAME` | No | Owner label shown in bot information. Default: `NOX`. |
+| `OWNER_NUMBER` | No, recommended | Owner's WhatsApp number in international format, used by owner-only features. Set the intended value in the host's secret settings; do not publish a personal number. |
+| `WORK_TYPE` | No | Operating mode: `public`, `private`, `group`, or `inbox`. Default: `public`. |
+| `GROUP_INVITE_CODE` | No | Used by the automatic group-join feature. The source currently contains a fallback invite value: review or replace it privately before deployment. Never publish the invite code. |
+| `BOT_FOOTER` | No | Footer text used in bot messages. |
+| `AUTO_STATUS_MSG` | No | Text used for automatic status handling. |
+| `REJECT_MSG` | No | Reply used when the anti-call setting rejects a call. |
+| `ALIVE_IMG` | No | Image URL used by the status command. |
+| `LIVE_MSG` | No | Status text shown by the bot. |
+| `MENU_IMAGE_URL` | No | Image URL used by the menu. |
+| `DESCRIPTION` | No | Short description shown in the menu. |
+| `REPO_URL` | No | Link shown by the `repo` command. The current source default points to this repository; change it only if you want another link. |
+| `PORT` | Usually provided by the host | HTTP listening port. Local fallback: `8000`. |
+| `NODE_ENV` | No | Set to `production` on a hosted service to use the production logging level. |
 
-Le préfixe de commande configuré dans le code est actuellement `.` (par exemple `.menu`). Le champ `PREFIX` présent dans le manifeste `app.json` n’est pas lu par la configuration d’exécution actuelle.
+The command prefix is currently hard-coded as `.` (for example, `.menu`). The runtime does not read a `PREFIX` environment variable.
 
-## Déploiement
+## Deployment options
 
-Le dépôt contient un manifeste `app.json` et le script de démarrage `npm start`. **Attention :** le manifeste sélectionne le mode Heroku `container`, mais le dépôt ne contient pas de `Dockerfile`; le déploiement Heroku direct n’est donc pas documenté comme prêt à l’emploi ici. Il faudra valider/corriger la stratégie de build dans une modification distincte avant d’utiliser Heroku. Cette mise à jour reste limitée à la documentation et ne modifie ni le bot ni son manifeste.
+This is a standard Node.js application: use a host that supports **Node.js 24.x**, installs the dependencies from `package.json`, runs `npm start`, supplies `PORT`, and allows the process to remain active. Select a **native Node.js/buildpack** option where available. This repository currently has **no `Dockerfile`**; do not select Docker/container deployment unless you add and maintain a Dockerfile separately. The provider-specific `app.json` file is not required for the deployment options below.
 
-Pour toute plateforme choisie, vérifie qu’elle prend en charge **Node.js 24.x**, lance `npm start`, fournit `PORT` et permet de définir les variables d’environnement requises — en particulier `MONGODB_URI` — dans son espace de secrets avant le démarrage.
+### Linux VPS or your own server
 
-Pour un autre hébergeur Node.js :
+This is the most direct option when you have a Linux VM or an always-on server. Install Node.js 24.x, clone the repository, follow the local installation steps, and keep `.env` private. To keep the bot running after closing your terminal or after a reboot, use a process manager such as PM2:
 
-1. Crée un service depuis le dépôt GitHub.
-2. Utilise `npm install` comme commande d’installation et `npm start` comme commande de démarrage.
-3. Ajoute `MONGODB_URI` dans les variables secrètes du service; ajoute les variables optionnelles utiles à ton instance.
-4. Déploie, puis ouvre l’URL publique pour accéder à la page de jumelage.
+```bash
+npm install --global pm2
+pm2 start index.js --name nox-free-mini-bot
+pm2 startup
+```
 
-## Jumeler WhatsApp
+Run the startup command printed by PM2, then save the process list:
 
-1. Ouvre l’URL publique de ton bot dans un navigateur.
-2. Saisis le numéro WhatsApp avec l’indicatif international demandé par la page et démarre le jumelage.
-3. Sur le téléphone concerné, ouvre WhatsApp → **Appareils connectés** → **Connecter un appareil** → option de connexion avec un numéro de téléphone.
-4. Saisis le code de jumelage affiché par la page.
-5. Une fois connecté, envoie `.menu` au bot pour consulter les commandes.
+```bash
+pm2 save
+```
 
-Le code de jumelage et la session donnent accès au compte WhatsApp concerné : ne les partage pas et ne les publie pas.
+A `systemd` service is another option. Protect the environment file (for example, `chmod 600 .env`), use a dedicated non-root account, and monitor the process and logs. Uptime and cost depend on your server, network, and provider; a VPS is not automatically free.
 
-## Vérification et dépannage
+### Render
 
-- Vérifie l’état du serveur avec `https://<URL-DE-TON-SERVICE>/ping`.
-- Si le serveur ne démarre pas, vérifie que `MONGODB_URI` est renseignée et que la base autorise la connexion depuis l’hébergement.
-- Si la page fonctionne mais qu’aucun code n’est généré, vérifie le numéro au format international, l’accès réseau du serveur et les journaux du déploiement.
-- Après un redémarrage, vérifie l’accès à MongoDB : les données de session y sont restaurées.
+Create a **Web Service** from the GitHub repository. Use `npm install` as the build command and `npm start` as the start command. Set `MONGODB_URI` and any other required values in the service's secret environment settings. See the [Render Node/Express guide](https://render.com/docs/deploy-node-express-app).
 
-## Sécurité
+**Free-tier limitation:** Render says Free Web Services spin down after 15 minutes without inbound traffic, including existing WebSocket messages. The bot needs a persistent WhatsApp connection, so a free instance may sleep or disconnect and should not be treated as a reliable 24/7 bot host. Render also states that Free instances have other limitations and are intended for testing or hobby projects; check the [current Free plan terms](https://render.com/docs/free).
 
-- Garde `.env`, `MONGODB_URI`, les identifiants d’administration, les codes de jumelage et les invitations WhatsApp hors du dépôt et des captures d’écran publiques.
-- Donne au compte MongoDB uniquement les permissions nécessaires et limite l’accès réseau selon les possibilités de ton hébergeur.
-- Ne déploie le bot que sur un compte et un numéro WhatsApp que tu es autorisé à gérer.
-- Les fonctions de groupe/modération peuvent agir sur les groupes où le bot a les droits correspondants : configure et utilise-les avec le consentement des administrateurs concernés.
+### Railway
 
-## Liens du développeur
+Create a project from the GitHub repository, use the Node.js build process, and set the start command to `npm start`. Add `MONGODB_URI` and other private settings in the service's variables/secrets. See the [Railway Quick Start](https://docs.railway.com/quick-start).
+
+**Free-tier limitation:** Railway currently lists a 30-day trial with `$5` in credits, followed by `$1` per month in included usage; the Free plan lists up to `0.5 GB` of RAM per service after the trial. This is a limited usage allowance, not unlimited free hosting or a promise of 24/7 uptime. Review [current Railway pricing](https://railway.com/pricing) and monitor usage.
+
+### Koyeb
+
+Create a **Web Service** from the GitHub repository and select the native Node.js buildpack rather than Docker. Use `npm start` and configure the required environment variables. The project has an HTTP server, so use a Web Service configuration. See Koyeb's [Express deployment guide](https://www.koyeb.com/docs/deploy/express).
+
+**Free-tier limitation:** Koyeb documents one Free Instance with `512 MB` RAM and `0.1 vCPU`; it is for Web Services only, cannot be used as a Worker Service, and scales to zero after one hour without traffic. Because this bot needs a persistent WhatsApp connection, that free instance is not suitable for dependable 24/7 operation. Check [Koyeb's current instance terms](https://www.koyeb.com/docs/reference/instances).
+
+### Other Node.js hosts
+
+The same app can be deployed to another Node.js host if it supports Node.js 24.x, `npm install`, `npm start`, runtime environment variables, an externally reachable HTTP port, outbound connections to WhatsApp/MongoDB, and a long-running process. Use the provider's native Node.js runtime; a serverless function or an instance that routinely sleeps may disconnect the bot.
+
+Free plans, included credits, resource limits, and uptime policies change. **Do not assume this bot will be free or continuously available on every host.** The provider notes above were checked against their linked official documentation on **October 12, 2026**; confirm current terms before deploying.
+
+## Pair WhatsApp
+
+1. Open the public URL of your deployed service in a browser.
+2. Enter the WhatsApp number using the international format requested by the page, then start pairing.
+3. On the phone, open WhatsApp → **Linked devices** → **Link a device** → choose the option to link with a phone number.
+4. Enter the pairing code displayed by the page.
+5. After connecting, send `.menu` to the bot to see the available commands.
+
+A pairing code and session provide access to the associated WhatsApp account. Do not share or publish them.
+
+## Health checks and troubleshooting
+
+- Check the service at `https://<YOUR-SERVICE-URL>/ping`.
+- If the server does not start, confirm `MONGODB_URI` is set and the database allows connections from the host.
+- If the page opens but no pairing code is generated, check the international phone-number format, outbound network access, and deployment logs.
+- After a restart, confirm MongoDB is reachable; the bot restores saved sessions from the database.
+
+## Security
+
+- Keep `.env`, `MONGODB_URI`, administrator credentials, pairing codes, and WhatsApp invite codes out of the repository and public screenshots.
+- Give the MongoDB account only the permissions it needs and restrict network access where the host allows it.
+- Deploy the bot only for a WhatsApp account and number you are authorized to manage.
+- Group and moderation features can affect groups where the bot has the necessary permissions. Configure and use them only with the consent of the relevant group administrators.
+
+## Developer links
 
 [![Telegram](https://img.shields.io/badge/Telegram-@noxprimeeeinc-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/nox_chh)
 [![Instagram](https://img.shields.io/badge/Instagram-@noxprimeeeinc-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/noxprimeeeinc)
