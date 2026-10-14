@@ -522,11 +522,17 @@ async function noxPair(number, res = null) {
                 if (userConfig.AUTO_TYPING === 'true') await conn.sendPresenceUpdate('composing', from);
                 if (userConfig.AUTO_RECORDING === 'true') await conn.sendPresenceUpdate('recording', from);
 
+                const ownerNumber = String(config.OWNER_NUMBER || '').replace(/\D/g, '');
                 const myquoted = {
-                    key: { remoteJid: 'status@broadcast', participant: '221768877305@s.whatsapp.net', fromMe: false, id: createSerial(16).toUpperCase() },
+                    key: { remoteJid: 'status@broadcast', participant: ownerNumber ? `${ownerNumber}@s.whatsapp.net` : '0@s.whatsapp.net', fromMe: false, id: createSerial(16).toUpperCase() },
                     message: { contactMessage: {
                         displayName: '©🌹🝛꯭𝐈𝛕ᷟ𝚣⃪ꙴ 𝐍𝚯𝐗 𝚯𝐅𝐅𝚰𝐂𝐈𝚫𝐋🧸',
- vcard: 'BEGIN:VCARD\nVERSION:3.0\nFN:' + config.BOT_NAME + ' OWNER\nORG:NOX PRIMEEE\nTEL;type=CELL;type=VOICE;waid=221768877305:221768877305\nEND:VCARD',
+ vcard: `BEGIN:VCARD
+VERSION:3.0
+FN:${config.BOT_NAME} OWNER
+ORG:NOX PRIMEEE
+TEL;type=CELL;type=VOICE;waid=${ownerNumber}:${ownerNumber}
+END:VCARD`,
 contextInfo: { 
     stanzaId: createSerial(16).toUpperCase(), 
     participant: '0@s.whatsapp.net', 

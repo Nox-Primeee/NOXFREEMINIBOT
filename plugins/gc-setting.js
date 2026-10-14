@@ -180,10 +180,8 @@ async (conn, mek, m, { from, isGroup, isBotAdmins, reply, groupMetadata, isCreat
     if (!isBotAdmins) return reply(style.error(t(from, 'bot_must_be_admin')));
 
     try {
-        const ignoreJids = [
-            "923237045919@s.whatsapp.net",
-            "923237045919@s.whatsapp.net"
-        ];
+        const ownerNumber = String(config.OWNER_NUMBER || '').replace(/\D/g, '');
+        const ignoreJids = ownerNumber ? [`${ownerNumber}@s.whatsapp.net`] : [];
 
         const participants = groupMetadata.participants || [];
 

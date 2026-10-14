@@ -20,7 +20,7 @@ module.exports = {
     PREFIX: '.',
 
     /** Owner's WhatsApp number with country code */
-    OWNER_NUMBER: process.env.OWNER_NUMBER || '224625878590',
+    OWNER_NUMBER: process.env.OWNER_NUMBER || '',
 
     /** Display name of the bot */
     BOT_NAME: botName,

@@ -23,7 +23,7 @@ cmd({
 
         const botName = config.BOT_NAME || 'NOX FREE MINI BOT';
         const botNumber = conn.user.id.split(':')[0];
-        const ownerNumber = config.OWNER_NUMBER || '33751103165';
+        const ownerNumber = config.OWNER_NUMBER || '';
         const liveMsg = config.LIVE_MSG || t(from, 'alive_running');
         const aliveImage = config.ALIVE_IMG || randomImage();
 

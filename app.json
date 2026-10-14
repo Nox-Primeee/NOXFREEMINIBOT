@@ -19,7 +19,7 @@
     "OWNER_NUMBER": {
       "description": "Owner WhatsApp number with country code.",
       "required": false,
-      "value": "224623752938"
+      "value": ""
     },
     "PREFIX": {
       "description": "Command prefix.",

@@ -11,8 +11,9 @@
   [![Render](https://img.shields.io/badge/Render-Node%20guide-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://render.com/docs/deploy-node-express-app)
   [![Railway](https://img.shields.io/badge/Railway-Node%20guide-0B0D0E?style=for-the-badge&logo=railway&logoColor=white)](https://docs.railway.com/quick-start)
   [![Koyeb](https://img.shields.io/badge/Koyeb-Node%20guide-121212?style=for-the-badge)](https://www.koyeb.com/docs/deploy/express)
+  [![Fork this repository](https://img.shields.io/badge/Fork_this_repository-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Nox-Primeee/NOXFREEMINIBOT/fork)
 
-  <p><strong>A multi-device WhatsApp bot built with Node.js, pairing codes, and MongoDB-backed sessions Powerd By @Nox-Primeee .</strong></p>
+  <p><strong>An open-source WhatsApp multi-device bot built with Node.js and Baileys, featuring pairing-code setup, MongoDB-backed sessions, a web pairing page, and a modular plugin system for messaging, media, and group tools. Created by @Nox-Primeee.</strong></p>
 </div>
 
 ## About
@@ -35,6 +36,7 @@ NOX FREE MINI BOT is a multi-device WhatsApp bot built with [Baileys](https://gi
 | Resource | Link |
 | --- | --- |
 | Source code | [GitHub — NOXFREEMINIBOT](https://github.com/Nox-Primeee/NOXFREEMINIBOT) |
+| Fork this repository | [Create your own fork](https://github.com/Nox-Primeee/NOXFREEMINIBOT/fork) |
 | WhatsApp library | [Baileys — WhiskeySockets](https://github.com/WhiskeySockets/Baileys) |
 | Node.js 24.x | [Node.js downloads](https://nodejs.org/) |
 | Database | [MongoDB Atlas](https://www.mongodb.com/atlas) |
